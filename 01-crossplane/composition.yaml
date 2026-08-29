@@ -1,34 +1,39 @@
 # =====================================================================
 # Crossplane Composition
 # =====================================================================
-
-# apiVersion: apiextensions.crossplane.io/v1
-# kind: Composition
-# metadata:
-#   name: postgresql-composition
-# spec:
-#   compositeTypeRef:
-#     apiVersion: ????
-#     kind: ???
-#     mode: Pipeline
-#   pipeline:
-#   - step: patch-and-transform
-#     functionRef:
-#       name: function-patch-and-transform
-#     input:
-#       apiVersion: pt.fn.crossplane.io/v1beta1
-#       kind: Resources
-#       resources:
-#       - name: postgresql-database
-#         base:
-#           apiVersion: ...
-#           kind: Database
-#           spec:
-#             forProvider:
-#             ...
-#           providerConfigRef:
-#             name: postgresql-config
-#         patches:
-#           - type: FromCompositeFieldPath
-#             fromFieldPath: "spec.parameters.???"
-#             toFieldPath: "spec.forProvider.???"
+apiVersion: apiextensions.crossplane.io/v1
+kind: Composition
+metadata:
+  name: postgresql-composition
+spec:
+  # 1. Referencia al XRD creado (database.poc.io/v1alpha1 -> XPostgreSQLInstance)
+  compositeTypeRef:
+    apiVersion: database.poc.io/v1alpha1
+    kind: XPostgreSQLInstance
+  mode: Pipeline
+  pipeline:
+    - step: patch-and-transform
+      functionRef:
+        name: function-patch-and-transform
+      input:
+        apiVersion: pt.fn.crossplane.io/v1beta1
+        kind: Resources
+        resources:
+          # 2. Creación del Managed Resource de tipo Database
+          - name: postgresql-database
+            base:
+              apiVersion: postgresql.upbound.io/v1alpha1
+              kind: Database
+              spec:
+                forProvider: {}
+                # 4. Referencia al ProviderConfig llamado postgresql-config
+                providerConfigRef:
+                  name: postgresql-config
+            # 3. Uso del patch de patch-and-transform para transferir parámetros
+            patches:
+              - type: FromCompositeFieldPath
+                fromFieldPath: spec.dbName
+                toFieldPath: spec.forProvider.dbName
+              - type: FromCompositeFieldPath
+                fromFieldPath: spec.owner
+                toFieldPath: metadata.labels.owner
