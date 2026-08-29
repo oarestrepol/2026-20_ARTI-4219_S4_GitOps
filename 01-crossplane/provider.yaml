@@ -6,3 +6,4 @@ metadata:
     argocd.argoproj.io/sync-wave: "0"
 spec:
   package: xpkg.upbound.io/tages/provider-postgresql:v0.1.0
+  packageImportPolicy: All
