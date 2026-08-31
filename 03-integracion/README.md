@@ -58,6 +58,11 @@ Simula que alguien modificó el Claim directamente en el clúster (lo que en Git
 kubectl patch xpostgresqlinstance mi-base-de-datos -n default \
   --type='merge' \
   -p '{"spec":{"parameters":{"dbName":"appdb-hacked"}}}'
+
+#Sin parameters
+kubectl patch postgresqlinstance mi-base-de-datos -n default \
+  --type='merge' \
+  -p '{"spec":{"dbName":"appdb-hacked"}}'
 ```
 
 ### Observar la auto-corrección
@@ -65,6 +70,9 @@ kubectl patch xpostgresqlinstance mi-base-de-datos -n default \
 ```bash
 # Observar en tiempo real
 watch -n 2 "kubectl get postgresqlinstance -n default -o jsonpath='{.items[0].spec.parameters.dbName}'"
+
+# Si no tiene comando watch
+while true; do clear; kubectl get postgresqlinstance -n default -o jsonpath='{.items[*].spec.dbName}{"\n"}'; sleep 2; done
 ```
 
 Argo CD detectará el drift y **automáticamente revertirá** al estado definido en Git.
@@ -77,4 +85,8 @@ Argo CD detectará el drift y **automáticamente revertirá** al estado definido
 kubectl get postgresqlinstance -n default \
   -o jsonpath='{.items[0].spec.parameters.dbName}'
 # Debe volver a: appdb-v2
+
+# Sin parameters
+kubectl get postgresqlinstance -n default \
+  -o jsonpath='{.items[0].spec.dbName}{"\n"}'
 ```
