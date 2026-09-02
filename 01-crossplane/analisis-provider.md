@@ -29,26 +29,22 @@ Este provider ofrece 17 Managed Resources:
 
 ### 2. Campos requeridos del recurso Database
 <!-- Completa aquí -->
-Los campos requeridos para el recurso Database son:
-```
-spec:
-    forProvider:
-    providerConfigRef:
-        name:
-    publishConnectionDetailsTo:
-        name:
-        configRef:
-            name:
-    writeConnectionSecretToRef:
-        name:
-        namespace:
-status:
-    conditions:
-        lastTransitionTime:
-        reason:
-        status:
-        type:
-```
+¿Qué campos son requeridos en spec.forProvider? ¿Cuáles son opcionales?
+De acuerdo a la documentacion no hay campos requeridos u mandatorios dentro del objeto spec.forProvider.
+El objeto forProvider en si mismo esta marcado como requerido, esto significa que se puede declarar un bloque forProvider:{} vacio
+y el recurso se creará utilizando los valores por defecto del servidor.
+
+Como opcionales se tienen los siguientes campos:
+-   allowConnections (boolean): Define si se permiten conexiones de usuarios a esta base de datos.
+-   connectionLimit (number): El límite máximo de conexiones simultáneas permitidas.
+-   encoding (string): La codificación de caracteres (por ejemplo, UTF8).
+-   isTemplate (boolean): Define si esta base de datos en sí misma puede ser usada posteriormente como una plantilla.
+-   lcCollate (string): La configuración de ordenación de caracteres (Collation).
+-   lcCtype (string): La configuración de clasificación de caracteres (Character Classification).
+-   name (string): El nombre explícito que tendrá la base de datos en PostgreSQL.
+-   owner (string): El rol/usuario que será dueño de la base de datos.
+-   tablespaceName (string): El espacio de tablas (Tablespace)  donde se almacenará físicamente la base de datos
+-   template (string): El nombre de la base de datos plantilla a partir de la cual se creará esta nueva base de datos.
 
 ### 3. Información requerida por el ProviderConfig
 <!-- Completa aquí -->
