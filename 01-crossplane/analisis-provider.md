@@ -30,7 +30,7 @@ Este provider ofrece 17 Managed Resources:
 ### 2. Campos requeridos del recurso Database
 <!-- Completa aquí -->
 Los campos requeridos para el recurso Database son:
-´´´
+```
 spec:
     forProvider:
     providerConfigRef:
@@ -48,12 +48,12 @@ status:
         reason:
         status:
         type:
-´´´
+```
 
 ### 3. Información requerida por el ProviderConfig
 <!-- Completa aquí -->
 Los campos requeridos para el recurso ProviderConfig son:
-´´´
+```
 spec:
     credentials:
         env:
@@ -71,5 +71,5 @@ status:
         reason:
         status:
         type:    
-´´´
+```
 
